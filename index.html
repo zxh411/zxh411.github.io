@@ -1,28 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>见面确认</title>
+    <!-- 移动端视口设置 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>见面邀请 | GitHub版</title>
     <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全屏容器 */
         body {
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: #f0f2f5;
-            font-family: Arial;
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
         }
-        h1 {
-            color: #2d3436;
-            font-size: 3em;
-            padding: 20px;
-            border-radius: 10px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        /* 消息容器 */
+        .meet-box {
+            padding: 2rem;
+            border: 4px solid #24292e; /* GitHub主题深灰色 */
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 90%;  /* 移动端防止溢出 */
+            margin: 0 20px;
+        }
+
+        /* 响应式文字 */
+        .meet-text {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            color: #24292e;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .meet-box {
+                border-width: 3px;
+                padding: 1.5rem;
+            }
+            .meet-text {
+                white-space: normal;  /* 小屏幕允许换行 */
+            }
+        }
+
+        /* 超小屏幕处理 */
+        @media (max-width: 480px) {
+            .meet-text {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>要见面吗？</h1>
+    <div class="meet-box">
+        <div class="meet-text">要见面吗</div>
+    </div>
 </body>
 </html>
