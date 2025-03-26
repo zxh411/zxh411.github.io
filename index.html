@@ -1,49 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>见面邀请</title>
+    <title>见面确认</title>
     <style>
-        * {
-            margin: 50;
-            padding: 50;
-            box-sizing: border-box;
-        }
-
         body {
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
+            height: 100vh;
+            background: #f0f2f5;
+            font-family: Arial;
         }
-
-        .message {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: bold;
-            text-align: center;
+        h1 {
+            color: #2d3436;
+            font-size: 3em;
             padding: 20px;
-            border: 4px solid #333;
-            border-radius: 15px;
-            background-color: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            text-stroke: 2px #333;
-            -webkit-text-stroke: 2px #333;
-            color: white;
-            white-space: nowrap;
-        }
-
-        /* 移动端优化 */
-        @media (max-width: 768px) {
-            .message {
-                border-width: 3px;
-                margin: 20px;
-            }
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <div class="message">要见面吗？</div>
+    <h1>要见面吗？</h1>
 </body>
 </html>
