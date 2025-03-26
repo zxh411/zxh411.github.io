@@ -133,14 +133,14 @@
             if(choice) {
                 container.style.transform = 'scale(0.95)'
                 setTimeout(() => {
-                    alert('✅ 已确认！稍后联系您～')
+                    alert('✅ 已确认，请回复日期～')
                     container.style.transform = 'scale(1)'
                 }, 150)
             } else {
                 container.style.transform = 'scale(0.95)'
                 setTimeout(() => {
                     if(confirm('⚠️ 确定要拒绝邀请吗？')) {
-                        alert('😢 已记录您的选择')
+                        alert('😢 回1退订')
                         window.location.href = 'https://github.com'
                     } else {
                         container.style.transform = 'scale(1)'
