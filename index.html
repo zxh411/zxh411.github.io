@@ -2,9 +2,16 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>见面邀请</title>
     <style>
+        /* 基础重置 */
+        :root {
+            --gh-green: #2ea44f;
+            --gh-red: #cb2431;
+            --gh-border: #e1e4e8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,110 +21,131 @@
         body {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #f8f9fa;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            padding: 20px;
+            background: #f6f8fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            padding: 16px;
         }
 
-        .meet-box {
-            padding: 2rem;
-            border: 3px solid #24292e;
-            border-radius: 12px;
+        /* 主容器 */
+        .container {
             background: #ffffff;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 600px;
+            border: 1px solid var(--gh-border);
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            padding: 32px;
             width: 100%;
-            margin-bottom: 2rem;
+            max-width: 480px;
+            text-align: center;
         }
 
-        .meet-text {
-            font-size: clamp(2.2rem, 8vw, 4.5rem);
-            font-weight: 700;
+        /* 标题样式 */
+        .title {
+            font-size: 32px;
             color: #24292e;
-            line-height: 1.3;
-            margin-bottom: 1.5rem;
+            margin-bottom: 24px;
+            font-weight: 600;
+            line-height: 1.25;
         }
 
         /* 按钮容器 */
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+        .buttons {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 1fr 1fr;
         }
 
-        /* 基础按钮样式 */
-        .choice-btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.4rem;
-            font-weight: 600;
+        /* 通用按钮样式 */
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-            text-transform: uppercase;
+            transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+            user-select: none;
         }
 
         /* 确认按钮 */
-        .yes-btn {
-            background: #2ea44f; /* GitHub同款绿色 */
+        .btn-yes {
+            background-color: var(--gh-green);
             color: white;
         }
 
-        .yes-btn:hover {
-            background: #22863a;
-            transform: scale(1.05);
+        .btn-yes:hover {
+            background-color: #22863a;
+            transform: translateY(-1px);
         }
 
         /* 取消按钮 */
-        .no-btn {
-            background: #cb2431; /* GitHub同款红色 */
+        .btn-no {
+            background-color: var(--gh-red);
             color: white;
         }
 
-        .no-btn:hover {
-            background: #9f1d26;
-            transform: scale(1.05);
+        .btn-no:hover {
+            background-color: #9f1d26;
+            transform: translateY(-1px);
         }
 
         /* 移动端优化 */
-        @media (max-width: 480px) {
-            .meet-box {
-                padding: 1.5rem;
+        @media (max-width: 544px) {
+            .container {
+                padding: 24px;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
             }
-            
-            .choice-btn {
+
+            .title {
+                font-size: 28px;
+                margin-bottom: 32px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
                 width: 100%;
-                font-size: 1.2rem;
-                padding: 0.8rem;
+                padding: 16px;
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="meet-box">
-        <div class="meet-text">要见面吗？</div>
-        <div class="button-group">
-            <button class="choice-btn yes-btn" onclick="handleChoice(true)">要</button>
-            <button class="choice-btn no-btn" onclick="handleChoice(false)">不要</button>
+    <div class="container">
+        <h1 class="title">要见面吗？</h1>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="handleResponse(true)">要</button>
+            <button class="btn btn-no" onclick="handleResponse(false)">不要</button>
         </div>
     </div>
 
     <script>
-        // 处理用户选择
-        function handleChoice(choice) {
+        // 交互处理函数
+        function handleResponse(choice) {
+            const container = document.querySelector('.container')
+            
             if(choice) {
-                alert("🎉 太好了！我稍后联系你～");
-                // 这里可以添加跳转页面或发送请求的代码
+                container.style.transform = 'scale(0.95)'
+                setTimeout(() => {
+                    alert('✅ 已确认！稍后联系您～')
+                    container.style.transform = 'scale(1)'
+                }, 150)
             } else {
-                if(confirm("😢 确定不要见面吗？")) {
-                    alert("好吧... 改主意了随时找我");
-                }
+                container.style.transform = 'scale(0.95)'
+                setTimeout(() => {
+                    if(confirm('⚠️ 确定要拒绝邀请吗？')) {
+                        alert('😢 已记录您的选择')
+                        window.location.href = 'https://github.com'
+                    } else {
+                        container.style.transform = 'scale(1)'
+                    }
+                }, 150)
             }
         }
     </script>
