@@ -1,183 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>见面邀请函</title>
+    <meta charset="utf-8">
+    <title>问候</title>
     <style>
-        :root {
-            --primary: #2ea44f;
-            --danger: #cb2431;
-            --border: #e1e4e8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #f6f8fa;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            padding: 20px;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-
-        .container {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
+        .message {
+            font-size: clamp(2rem, 10vw, 5rem);
+            font-weight: 700;
             text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        h1 {
-            color: #24292e;
-            font-size: 2.2rem;
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-
-        .btn-group {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-confirm {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-confirm:hover {
-            background: #22863a;
-            transform: translateY(-2px);
-        }
-
-        .btn-cancel {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-cancel:hover {
-            background: #9f1d26;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 25px;
-                border-radius: 0;
-                border: none;
-                box-shadow: none;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .btn-group {
-                grid-template-columns: 1fr;
-            }
-
-            .btn {
-                width: 100%;
-                padding: 18px;
-            }
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📩 要见面吗？</h1>
-        <div class="btn-group">
-            <button class="btn btn-confirm" onclick="handleResponse(true)">✅ 要</button>
-            <button class="btn btn-cancel" onclick="handleResponse(false)">❌ 不要</button>
-        </div>
+    <div class="message">
+        <p>你还好吗？😢</p>
+        <!-- 备选表情：🥺👉👈 或 😥 -->
     </div>
-
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
-    <script>
-        // 初始化邮件服务 (需要先注册EmailJS)
-        (function(){
-            emailjs.init('YOUR_EMAILJS_PUBLIC_KEY'); // 替换为实际公钥
-        })();
-
-        async function sendEmail(action, detail = '') {
-            const ip = await fetch('https://api.ipify.org?format=json')
-                .then(r => r.json())
-                .then(data => data.ip)
-                .catch(() => '未知IP');
-
-            const templateParams = {
-                to_email: '2273024084@qq.com',
-                action: action,
-                detail: detail,
-                timestamp: new Date().toLocaleString(),
-                ip_address: ip,
-                user_agent: navigator.userAgent
-            };
-
-            emailjs.send('YOUR_EMAILJS_SERVICE_ID', 'YOUR_EMAILJS_TEMPLATE_ID', templateParams)
-                .then(() => console.log('邮件已发送'))
-                .catch(error => console.error('发送失败:', error));
-        }
-
-        async function handleResponse(isConfirm) {
-            if(isConfirm) {
-                const date = prompt('📅 已确认！请回复见面日期（示例：7月15日）～');
-                if(date) {
-                    alert(`⏰ 已记录：${date}\n我们将准时赴约！`);
-                    await sendEmail('同意邀请', `日期：${date}`);
-                }
-            } else {
-                if(!confirm('⚠️ 确定要拒绝邀请吗？')) return;
-                
-                const code = prompt('💔 请回数字 1 确认退订：');
-                if(code === '1') {
-                    alert('🚫 已成功退订');
-                    await sendEmail('拒绝邀请', '已确认退订');
-                    setTimeout(() => window.location.href = 'https://github.com', 1500);
-                } else if(code !== null) {
-                    alert('❓ 输入错误，已取消退订');
-                }
-            }
-        }
-    </script>
-
-    <!-- 隐私声明 -->
-    <div style="position: fixed; bottom: 10px; color: #666; font-size: 0.8em;">
-        本页面使用Cookie和第三方服务进行必要操作，继续使用即表示您同意我们的
-        隐私政策
-    </div>
-
-    <script>
-        function showPrivacy() {
-            alert(`隐私声明：
-1. 我们仅收集必要操作数据用于服务通知
-2. IP地址用于防止滥用行为
-3. 数据保留不超过30天
-4. 不会向第三方分享用户数据`);
-        }
-    </script>
 </body>
 </html>
