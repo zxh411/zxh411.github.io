@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>问候</title>
+    <title>愚人节惊喜</title>
     <style>
         body {
             display: flex;
@@ -10,22 +10,64 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            overflow: hidden;
         }
-        .message {
-            font-size: clamp(2rem, 10vw, 5rem);
-            font-weight: 700;
+
+        .container {
+            animation: bounce 1s ease both;
+        }
+
+        .text {
+            font-size: clamp(3rem, 15vw, 8rem);
+            font-weight: 900;
             text-align: center;
-            font-family: Arial, sans-serif;
-            color: #333;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-family: 'Comic Sans MS', cursive;
+            color: #fff;
+            text-shadow: 3px 3px 0 #ff4757;
+            transform: rotate(-3deg);
+            margin-bottom: 2rem;
+        }
+
+        .emoji-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .emoji {
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .emoji:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* 动画效果 */
+        @keyframes bounce {
+            0% { transform: translateY(-100vh) scale(0); }
+            60% { transform: translateY(30px) scale(1.1); }
+            80% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        <p>你还好吗？😢</p>
-        <!-- 备选表情：🥺👉👈 或 😥 -->
+    <div class="container">
+        <div class="text">愚人节！？🎉</div>
+        <div class="emoji-container">
+            <div class="emoji" style="animation-delay: 0.2s">🎭</div>
+            <div class="emoji" style="animation-delay: 0.5s">🤡</div>
+            <div class="emoji" style="animation-delay: 0.8s">💣</div>
+        </div>
     </div>
 </body>
 </html>
