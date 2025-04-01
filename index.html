@@ -2,72 +2,124 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>愚人节惊喜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能盆栽</title>
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(160deg, #c6e4b4 0%, #f8f9d2 100%);
+            font-family: 'Comic Sans MS', cursive;
             overflow: hidden;
         }
 
-        .container {
-            animation: bounce 1s ease both;
-        }
-
-        .text {
-            font-size: clamp(3rem, 15vw, 8rem);
+        .plant {
+            font-size: clamp(3rem, 10vw, 6rem);
             font-weight: 900;
             text-align: center;
-            font-family: 'Comic Sans MS', cursive;
-            color: #fff;
-            text-shadow: 3px 3px 0 #ff4757;
-            transform: rotate(-3deg);
+            color: #2a5a3a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
-        }
-
-        .emoji-container {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-
-        .emoji {
-            font-size: 4rem;
-            animation: float 3s ease-in-out infinite;
-            cursor: pointer;
             transition: 0.3s;
+            cursor: pointer;
         }
 
-        .emoji:hover {
-            transform: scale(1.2) rotate(10deg);
+        .water-btn {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            background: #89CFF0;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(137,207,240,0.3);
         }
 
-        /* 动画效果 */
-        @keyframes bounce {
-            0% { transform: translateY(-100vh) scale(0); }
-            60% { transform: translateY(30px) scale(1.1); }
-            80% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
+        .water-btn:active {
+            transform: scale(0.95);
+        }
+
+        .droplet {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: splash 1s linear forwards;
+        }
+
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        @keyframes plantShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        @keyframes splash {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+        }
+
+        .cloud {
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50px;
+            animation: float 10s infinite linear;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+            from { transform: translateX(-100vw); }
+            to { transform: translateX(100vw); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="text">愚人节！？🎉</div>
-        <div class="emoji-container">
-            <div class="emoji" style="animation-delay: 0.2s">🎭</div>
-            <div class="emoji" style="animation-delay: 0.5s">🤡</div>
-            <div class="emoji" style="animation-delay: 0.8s">💣</div>
-        </div>
-    </div>
+    <div class="cloud" style="top:20%; left:-10%"></div>
+    <div class="cloud" style="top:30%; right:-10%; animation-delay:-3s"></div>
+    
+    <div class="plant" onclick="waterPlant()">🪴 我是盆栽<br>请给我浇水 💦</div>
+    <button class="water-btn" onclick="waterPlant()">点击浇水！</button>
+    <div class="counter">已浇水：<span id="count">0</span> 次</div>
+
+    <script>
+        let waterCount = 0;
+
+        function waterPlant() {
+            // 更新计数器
+            waterCount++;
+            document.getElementById('count').textContent = waterCount;
+            
+            // 创建水滴特效
+            for(let i = 0; i < 8; i++) {
+                const droplet = document.createElement('div');
+                droplet.className = 'droplet';
+                droplet.innerHTML = '💧';
+                droplet.style.left = `${Math.random() * 100}%`;
+                droplet.style.animationDelay = `${i * 0.1}s`;
+                document.body.appendChild(droplet);
+                
+                setTimeout(() => droplet.remove(), 1000);
+            }
+
+            // 添加盆栽动画
+            const plant = document.querySelector('.plant');
+            plant.style.animation = 'plantShake 0.5s ease';
+            setTimeout(() => plant.style.animation = '', 500);
+        }
+    </script>
 </body>
 </html>
