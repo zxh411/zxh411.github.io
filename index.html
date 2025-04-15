@@ -3,122 +3,201 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能盆栽</title>
+    <title>盆栽留言机</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background: linear-gradient(160deg, #c6e4b4 0%, #f8f9d2 100%);
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5d9ff 0%, #c7f3ff 100%);
             font-family: 'Comic Sans MS', cursive;
-            overflow: hidden;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .plant {
-            font-size: clamp(3rem, 10vw, 6rem);
+        .title {
+            font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 900;
             text-align: center;
-            color: #2a5a3a;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            color: #5c3d6a;
+            text-shadow: 2px 2px 0 #fff;
+            margin: 2rem 0;
+            cursor: pointer;
+        }
+
+        .phone-icon {
+            font-size: 8rem;
+            animation: ring 2s ease infinite;
+            cursor: pointer;
             transition: 0.3s;
-            cursor: pointer;
+            margin: 2rem 0;
         }
 
-        .water-btn {
-            padding: 1rem 2rem;
-            font-size: 1.5rem;
-            background: #89CFF0;
+        .message-form {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            width: 80%;
+            max-width: 500px;
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            resize: none;
+            padding: 1rem;
+            border: 2px solid #b8e0d2;
+            border-radius: 15px;
+            font-family: inherit;
+        }
+
+        button {
+            padding: 1rem;
+            background: #ff9dd8;
             border: none;
-            border-radius: 50px;
+            border-radius: 15px;
             color: white;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(137,207,240,0.3);
+            transition: 0.3s;
         }
 
-        .water-btn:active {
-            transform: scale(0.95);
+        button:hover {
+            background: #ff7ec3;
         }
 
-        .droplet {
+        .message-list {
+            width: 80%;
+            max-width: 600px;
+            margin-top: 2rem;
+        }
+
+        .message-item {
+            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .sparkle {
             position: absolute;
             font-size: 2rem;
             pointer-events: none;
-            animation: splash 1s linear forwards;
+            animation: sparkle 1s linear forwards;
         }
 
-        .counter {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 1.2rem;
-            background: rgba(255,255,255,0.9);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        @keyframes sparkle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(3); }
         }
 
-        @keyframes plantShake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            75% { transform: rotate(-5deg); }
-        }
-
-        @keyframes splash {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
-        }
-
-        .cloud {
+        .floating-heart {
             position: absolute;
-            width: 100px;
-            height: 40px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50px;
-            animation: float 10s infinite linear;
+            font-size: 1.5rem;
+            animation: float 5s infinite linear;
         }
 
         @keyframes float {
-            from { transform: translateX(-100vw); }
-            to { transform: translateX(100vw); }
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="cloud" style="top:20%; left:-10%"></div>
-    <div class="cloud" style="top:30%; right:-10%; animation-delay:-3s"></div>
+    <h1 class="title">要经常想我<br>记得给盆栽留言📞</h1>
     
-    <div class="plant" onclick="waterPlant()">🪴 我是盆栽<br>请给我浇水 💦</div>
-    <button class="water-btn" onclick="waterPlant()">点击浇水！</button>
-    <div class="counter">已浇水：<span id="count">0</span> 次</div>
+    <div class="phone-icon" onclick="showMessageForm()">📱</div>
+    
+    <form class="message-form" id="messageForm">
+        <textarea placeholder="说点什么给盆栽吧..." rows="4"></textarea>
+        <button type="button" onclick="saveMessage()">发送留言💌</button>
+    </form>
+
+    <div class="message-list" id="messageList"></div>
 
     <script>
-        let waterCount = 0;
+        // 初始化加载留言
+        window.onload = () => {
+            loadMessages();
+            createFloatingHearts();
+        }
 
-        function waterPlant() {
-            // 更新计数器
-            waterCount++;
-            document.getElementById('count').textContent = waterCount;
-            
-            // 创建水滴特效
-            for(let i = 0; i < 8; i++) {
-                const droplet = document.createElement('div');
-                droplet.className = 'droplet';
-                droplet.innerHTML = '💧';
-                droplet.style.left = `${Math.random() * 100}%`;
-                droplet.style.animationDelay = `${i * 0.1}s`;
-                document.body.appendChild(droplet);
-                
-                setTimeout(() => droplet.remove(), 1000);
+        function createFloatingHearts() {
+            for(let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💖';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDelay = `${i * 2}s`;
+                document.body.appendChild(heart);
             }
+        }
 
-            // 添加盆栽动画
-            const plant = document.querySelector('.plant');
-            plant.style.animation = 'plantShake 0.5s ease';
-            setTimeout(() => plant.style.animation = '', 500);
+        function showMessageForm() {
+            const form = document.querySelector('.message-form');
+            form.style.display = 'flex';
+            createSparkles();
+            document.querySelector('.phone-icon').style.animation = 'none';
+            setTimeout(() => document.querySelector('.phone-icon').style.animation = 'ring 2s ease infinite', 500);
+        }
+
+        function saveMessage() {
+            const textarea = document.querySelector('textarea');
+            if(textarea.value.trim()) {
+                // 保存到localStorage
+                const messages = JSON.parse(localStorage.getItem('plantMessages') || '[]');
+                messages.push({
+                    text: textarea.value,
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('plantMessages', JSON.stringify(messages));
+                
+                // 清空输入框
+                textarea.value = '';
+                createSparkles();
+                loadMessages();
+            }
+        }
+
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem('plantMessages') || []);
+            const list = document.getElementById('messageList');
+            list.innerHTML = messages.map(msg => `
+                <div class="message-item">
+                    <div>💬 ${msg.text}</div>
+                    <div style="color: #999; font-size: 0.8rem; margin-top: 0.5rem">${msg.date}</div>
+                </div>
+            `).join('');
+        }
+
+        function createSparkles() {
+            for(let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.innerHTML = '✨';
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }
         }
     </script>
 </body>
