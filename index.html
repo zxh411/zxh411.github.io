@@ -3,244 +3,210 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>盆栽</title>
+    <title>盆栽点歌台</title>
     <style>
         body {
             background: #000;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
-            font-family: 'Courier New', monospace;
-            position: relative;
+            padding: 2rem;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
         }
 
         .title {
-            font-size: clamp(3rem, 10vw, 6rem);
+            font-size: clamp(2.5rem, 10vw, 5rem);
             font-weight: 900;
             text-align: center;
-            padding: 2rem 0;
-            text-shadow: 0 0 20px #00ff9d;
+            margin: 2rem 0;
+            text-shadow: 0 0 15px #FF69B4;
             position: relative;
         }
 
         .title::after {
-            content: '🎵';
+            content: '🎧';
             position: absolute;
-            right: 10%;
-            animation: glow 2s ease-in-out infinite;
+            right: -10%;
+            top: -20%;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
         }
 
-        .container {
+        .player-container {
             display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
             gap: 3rem;
+            margin: 2rem 0;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* 复古唱片机样式 */
-        .record-player {
-            width: 400px;
+        .vinyl-player {
+            width: 320px;
             position: relative;
-            filter: drop-shadow(0 0 10px rgba(0,255,157,0.5));
+            filter: drop-shadow(0 0 15px #FF69B4);
         }
 
-        .record {
-            width: 100%;
-            height: 400px;
-            background: #1a1a1a;
+        .vinyl {
+            width: 320px;
+            height: 320px;
             border-radius: 50%;
+            background: #1a1a1a;
             position: relative;
             overflow: hidden;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s;
         }
 
-        .record::before {
-            content: '';
+        .vinyl-label {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 15px,
-                #00ff9d33 15px,
-                #00ff9d33 30px
-            );
-        }
-
-        .record-hole {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: #fff;
+            width: 140px;
+            height: 140px;
+            background: #FF69B4;
             border-radius: 50%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
         }
 
-        .tonearm {
-            position: absolute;
-            width: 120px;
-            height: 4px;
-            background: #666;
-            top: 30%;
-            left: 80%;
-            transform-origin: left center;
-            transform: rotate(-30deg);
-            transition: transform 0.5s;
-        }
-
-        /* 歌词面板样式 */
-        .lyrics-section {
-            flex: 1;
+        .lyrics-panel {
+            width: 400px;
+            background: rgba(255,255,255,0.1);
             padding: 2rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-
-        .lyrics-title {
-            font-size: 2rem;
-            color: #00ff9d;
-            border-bottom: 2px solid;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .lyric-item {
-            font-size: 1.2rem;
-            margin: 1.5rem 0;
-            padding-left: 2rem;
+            border-radius: 20px;
             position: relative;
-            opacity: 0;
-            animation: fadeIn 0.8s forwards;
         }
 
-        .lyric-item::before {
-            content: '♫';
-            position: absolute;
-            left: 0;
-            color: #00ff9d;
+        .lyrics-item {
+            padding: 1rem;
+            margin: 1rem 0;
+            background: rgba(0,0,0,0.3);
+            border-left: 3px solid #FF69B4;
+            animation: slideIn 0.5s ease;
         }
 
-        /* 留言功能样式 */
         .message-form {
-            margin-top: 3rem;
             display: flex;
             gap: 1rem;
+            margin-top: 2rem;
         }
 
         input {
-            flex: 1;
             padding: 1rem;
+            width: 300px;
             background: rgba(255,255,255,0.1);
-            border: 1px solid #00ff9d;
+            border: 2px solid #FF69B4;
             color: #fff;
-            font-family: inherit;
+            border-radius: 25px;
+            font-size: 1rem;
         }
 
         button {
             padding: 1rem 2rem;
-            background: #00ff9d;
+            background: #FF69B4;
             border: none;
-            color: #000;
-            font-weight: bold;
+            border-radius: 25px;
             cursor: pointer;
+            color: #fff;
+            font-weight: bold;
             transition: 0.3s;
         }
 
-        button:hover {
-            background: #00e68a;
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .message-list {
-            margin-top: 2rem;
-            border-top: 1px solid #333;
-            padding-top: 2rem;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* 动画效果 */
-        @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 10px #00ff9d); }
-            50% { filter: drop-shadow(0 0 20px #00ff9d); }
-        }
-
-        @keyframes recordSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeIn {
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
-        .record.active {
-            animation: recordSpin 3s linear infinite;
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particle 1s linear forwards;
+        }
+
+        @keyframes particle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(3); }
         }
     </style>
 </head>
 <body>
-    <h1 class="title">盆栽</h1>
+    <h1 class="title">盆栽点歌台</h1>
 
-    <div class="container">
-        <div class="record-player">
-            <div class="tonearm"></div>
-            <div class="record">
-                <div class="record-hole"></div>
+    <div class="player-container">
+        <div class="vinyl-player">
+            <div class="vinyl">
+                <div class="vinyl-label"><br>🎤<br></div>
             </div>
         </div>
-
-        <div class="lyrics-section">
-            <h2 class="lyrics-title">歌词片段 ✨</h2>
+        
+        <div class="lyrics-panel">
+            <div class="lyrics-item">💿 用尽伤人的话去说</div>
+            <div class="lyrics-item">🎙 我怀念的是无话不说</div>
+            <div class="lyrics-item">🎵 不如用误会来结尾</div>
+            <div class="lyrics-item">🌌 还仍然在各自宇宙 错过了春天</div>
             
-            <div class="lyric-item" style="animation-delay: 0.2s">用尽伤人的话去说</div>
-            <div class="lyric-item" style="animation-delay: 0.4s">我怀念的是无话不说</div>
-            <div class="lyric-item" style="animation-delay: 0.6s">不如用误会来结尾</div>
-            <div class="lyric-item" style="animation-delay: 0.8s">还仍然在各自宇宙 错过了春天</div>
-
-            <form class="message-form" onsubmit="addMessage(event)">
-                <input type="text" placeholder="..." required>
-                <button type="submit">发送 💌</button>
-            </form>
-
-            <div class="message-list" id="messageList"></div>
+            <div class="message-form">
+                <input type="text" placeholder="..." id="lyric-input">
+                <button onclick="addLyric()">添加歌词 ✨</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 唱片机交互
-        const record = document.querySelector('.record');
-        let isPlaying = false;
-
-        record.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            record.style.animationPlayState = isPlaying ? 'running' : 'paused';
-            document.querySelector('.tonearm').style.transform = 
-                isPlaying ? 'rotate(-5deg)' : 'rotate(-30deg)';
+        // 唱片旋转效果
+        const vinyl = document.querySelector('.vinyl');
+        let rotation = 0;
+        
+        vinyl.addEventListener('click', () => {
+            rotation += 360;
+            vinyl.style.transform = `rotate(${rotation}deg)`;
+            createParticles();
         });
 
-        // 留言功能
-        function addMessage(event) {
-            event.preventDefault();
-            const input = event.target.querySelector('input');
-            if (input.value.trim()) {
-                const messageList = document.getElementById('messageList');
-                const newMessage = document.createElement('div');
-                newMessage.className = 'lyric-item';
-                newMessage.innerHTML = `
-                    <span style="color:#00ff9d">💬</span> 
-                    ${input.value} 
-                    <span style="color:#666; font-size:0.8em">${new Date().toLocaleTimeString()}</span>
-                `;
-                messageList.prepend(newMessage);
+        // 添加歌词功能
+        function addLyric() {
+            const input = document.getElementById('lyric-input');
+            if(input.value.trim()) {
+                const newLyric = document.createElement('div');
+                newLyric.className = 'lyrics-item';
+                newLyric.innerHTML = `💫 ${input.value}`;
+                document.querySelector('.lyrics-panel').insertBefore(newLyric, document.querySelector('.message-form'));
                 input.value = '';
+                createParticles();
             }
         }
 
-        // 初始化唱片动画
-        record.style.animation = 'recordSpin 3s linear infinite';
-        record.style.animationPlayState = 'paused';
+        // 粒子特效
+        function createParticles() {
+            for(let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.innerHTML = ['🎶', '✨', '🌟'][Math.floor(Math.random()*3)];
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
     </script>
 </body>
 </html>
