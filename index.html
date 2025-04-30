@@ -19,11 +19,21 @@
         }
 
         .title {
-            font-size: clamp(2rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 10vw, 5rem);
             font-weight: 900;
             text-align: center;
             margin: 2rem 0;
-            text-shadow: 0 0 10px #7fffd4;
+            text-shadow: 0 0 15px #FF69B4;
+            position: relative;
+        }
+
+        .title::after {
+            content: '🎧';
+            position: absolute;
+            right: -10%;
+            top: -20%;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
         }
 
         .player-container {
@@ -31,47 +41,31 @@
             gap: 3rem;
             margin: 2rem 0;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .vinyl-player {
-            width: 300px;
+            width: 320px;
             position: relative;
+            filter: drop-shadow(0 0 15px #FF69B4);
         }
 
         .vinyl {
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             border-radius: 50%;
-            background: #111;
+            background: #1a1a1a;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(127,255,212,0.3);
-        }
-
-        .vinyl::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-radial-gradient(#222 0%, #000 5%);
-        }
-
-        .vinyl-hole {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #fff;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            transition: transform 0.3s;
         }
 
         .vinyl-label {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background: #7fffd4;
+            width: 140px;
+            height: 140px;
+            background: #FF69B4;
             border-radius: 50%;
             top: 50%;
             left: 50%;
@@ -79,129 +73,138 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: #000;
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
         }
 
-        .lyrics-box {
+        .lyrics-panel {
             width: 400px;
-            height: 300px;
             background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .lyrics-item {
             padding: 1rem;
-            border-radius: 10px;
-            overflow-y: auto;
+            margin: 1rem 0;
+            background: rgba(0,0,0,0.3);
+            border-left: 3px solid #FF69B4;
+            animation: slideIn 0.5s ease;
         }
 
         .message-form {
-            margin-top: 2rem;
             display: flex;
             gap: 1rem;
+            margin-top: 2rem;
         }
 
         input {
-            padding: 0.8rem;
+            padding: 1rem;
             width: 300px;
             background: rgba(255,255,255,0.1);
-            border: 1px solid #7fffd4;
+            border: 2px solid #FF69B4;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 25px;
+            font-size: 1rem;
         }
 
         button {
-            padding: 0.8rem 1.5rem;
-            background: #7fffd4;
+            padding: 1rem 2rem;
+            background: #FF69B4;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            color: #000;
+            color: #fff;
             font-weight: bold;
-        }
-
-        .message-item {
-            background: rgba(255,255,255,0.05);
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 5px;
+            transition: 0.3s;
         }
 
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .spark {
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .particle {
             position: absolute;
-            font-size: 1.2rem;
-            animation: sparkle 1.5s linear infinite;
+            pointer-events: none;
+            animation: particle 1s linear forwards;
         }
 
-        @keyframes sparkle {
-            0% { opacity: 0; transform: translateY(0); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-100px); }
+        @keyframes particle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(3); }
         }
     </style>
 </head>
 <body>
-    <h1 class="title">盆栽点歌台<br>🎶《暧昧》🎵</h1>
+    <h1 class="title">盆栽点歌台</h1>
 
     <div class="player-container">
         <div class="vinyl-player">
             <div class="vinyl">
-                <div class="vinyl-hole"></div>
-                <div class="vinyl-label">盆栽音乐<br>♫ 暧昧 ♫</div>
+                <div class="vinyl-label">点歌台<br>🎤<br>专属频道</div>
             </div>
         </div>
         
-        <div class="lyrics-box" id="lyrics">
-            <div class="message-item">🎤 歌词片段：</div>
-            <div class="message-item">💿 暧昧让人受尽委屈</div>
-            <div class="message-item">💿 找不到相爱的证据</div>
-            <div class="message-item">💿 何时该前进 何时该放弃</div>
-            <div class="message-item">💿 连拥抱都没有勇气</div>
+        <div class="lyrics-panel">
+            <div class="lyrics-item">💔 用尽伤人的话去说</div>
+            <div class="lyrics-item">🎙️ 我怀念的是无话不说</div>
+            <div class="lyrics-item">🎵 不如用误会来结尾</div>
+            <div class="lyrics-item">🌌 还仍然在各自宇宙 错过了春天</div>
+            
+            <div class="message-form">
+                <input type="text" placeholder="输入你的歌词回忆..." id="lyric-input">
+                <button onclick="addLyric()">添加歌词 ✨</button>
+            </div>
         </div>
     </div>
 
-    <div class="message-form">
-        <input type="text" placeholder="留下你的点歌留言..." id="message">
-        <button onclick="addMessage()">发送 ✉️</button>
-    </div>
-
     <script>
-        // 唱片旋转逻辑
+        // 唱片旋转效果
         const vinyl = document.querySelector('.vinyl');
-        let isPlaying = false;
-
+        let rotation = 0;
+        
         vinyl.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            vinyl.style.animation = isPlaying ? 'rotate 2s linear infinite' : 'none';
-            createSparks();
+            rotation += 360;
+            vinyl.style.transform = `rotate(${rotation}deg)`;
+            createParticles();
         });
 
-        // 创建星火特效
-        function createSparks() {
-            for(let i = 0; i < 5; i++) {
-                const spark = document.createElement('div');
-                spark.className = 'spark';
-                spark.innerHTML = '✨';
-                spark.style.left = `${Math.random() * 100}%`;
-                spark.style.animationDelay = `${i * 0.2}s`;
-                document.body.appendChild(spark);
-                setTimeout(() => spark.remove(), 1500);
+        // 添加歌词功能
+        function addLyric() {
+            const input = document.getElementById('lyric-input');
+            if(input.value.trim()) {
+                const newLyric = document.createElement('div');
+                newLyric.className = 'lyrics-item';
+                newLyric.innerHTML = `💫 ${input.value}`;
+                document.querySelector('.lyrics-panel').insertBefore(newLyric, document.querySelector('.message-form'));
+                input.value = '';
+                createParticles();
             }
         }
 
-        // 留言功能
-        function addMessage() {
-            const input = document.getElementById('message');
-            if(input.value.trim()) {
-                const lyricsBox = document.getElementById('lyrics');
-                const newMsg = document.createElement('div');
-                newMsg.className = 'message-item';
-                newMsg.innerHTML = `💌 ${input.value}`;
-                lyricsBox.appendChild(newMsg);
-                input.value = '';
-                createSparks();
+        // 粒子特效
+        function createParticles() {
+            for(let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.innerHTML = ['🎶', '✨', '🌟'][Math.floor(Math.random()*3)];
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
             }
         }
     </script>
